@@ -1,0 +1,15 @@
+.box.box-horizontal {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+.box.box-horizontal .field {
+    margin: 0;
+    flex-grow: 1;
+}
+
+.scrollable {
+    height: 60vh;
+    overflow-y: scroll;
+}

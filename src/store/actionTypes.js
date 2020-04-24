@@ -1,0 +1,5 @@
+export default {
+    SET_CURRENT_MONTH: 'SET_CURRENT_MONTH',
+    SET_FILE_PATHS: 'SET_FILE_PATHS',
+    SET_TABLES: 'SET_TABLES'
+};

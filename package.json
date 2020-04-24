@@ -1,0 +1,70 @@
+{
+    "name": "electron-react-boilerplate",
+    "version": "0.0.1",
+    "author": {
+        "name": "Seth Davis",
+        "email": "your.email@domain.com",
+        "url": "https://your-website.com"
+    },
+    "private": true,
+    "main": "public/electron.js",
+    "homepage": "./",
+    "dependencies": {
+        "classnames": "^2.2.6",
+        "date-fns": "^2.2.1",
+        "electron-is-dev": "^1.1.0",
+        "lodash": "^4.17.15",
+        "numeral": "^2.0.6",
+        "react": "^16.9.0",
+        "react-dom": "^16.9.0",
+        "react-scripts": "3.1.1"
+    },
+    "scripts": {
+        "start": "rescripts start",
+        "build": "rescripts build",
+        "test": "rescripts test",
+        "dev": "concurrently \"BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron .\"",
+        "postinstall": "electron-builder install-app-deps",
+        "preelectron-pack": "yarn build",
+        "electron-pack": "build -mw"
+    },
+    "build": {
+        "appId": "com.my-website.my-app",
+        "productName": "MyApp",
+        "copyright": "Copyright © 2019 ${author}",
+        "mac": {
+            "category": "public.app-category.utilities"
+        },
+        "files": [
+            "build/**/*",
+            "node_modules/**/*"
+        ],
+        "directories": {
+            "buildResources": "assets"
+        }
+    },
+    "eslintConfig": {
+        "extends": "react-app"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@rescripts/cli": "0.0.11",
+        "@rescripts/rescript-env": "0.0.10",
+        "concurrently": "^4.1.2",
+        "electron": "^6.0.5",
+        "electron-builder": "^21.2.0",
+        "typescript": "^3.6.2",
+        "wait-on": "^3.3.0"
+    }
+}
