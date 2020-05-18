@@ -1,6 +1,7 @@
 import React from 'react';
 import snakeCase from 'lodash/snakeCase';
 import upperCase from 'lodash/upperCase';
+import numeral from 'numeral';
 import { Months } from '../constants';
 
 const fs = require('fs');
@@ -70,5 +71,9 @@ export const buildDocumentReducer = currentMonth => (rowArr, currentRow) => {
 
 export const hasDateInRow = row => row[1] && row[1].includes('/');
 
-export const getMonthNumber = monthString =>
-    monthString === 'string' ? Number(monthString.split('/')[0]) : 0;
+export const getMonthNumber = rowArr =>
+    Array.isArray(rowArr) &&
+    typeof rowArr[1] === 'string' &&
+    rowArr[1].includes('/')
+        ? numeral(rowArr[1].split('/')[0]).value()
+        : 0;

@@ -1,7 +1,5 @@
 import React from 'react';
 
-const SelectOption = ({ value }) => {
-    return <option value={value}>{value}</option>;
-};
+const SelectOption = ({ text, value }) => <option value={value}>{text}</option>;
 
 export default SelectOption;

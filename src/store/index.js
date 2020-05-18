@@ -1,6 +1,13 @@
 import ActionTypes from './actionTypes';
-import { Months } from '../constants';
 import { getMonth } from 'date-fns';
+
+const currentMonth = getMonth(new Date());
+
+export const initialState = {
+    currentMonth,
+    filePaths: [],
+    documentsData: []
+};
 
 export const reducer = (state, { type, payload }) => {
     switch (type) {
@@ -10,10 +17,10 @@ export const reducer = (state, { type, payload }) => {
                 filePaths: payload.filePaths
             };
 
-        case ActionTypes.SET_TABLES:
+        case ActionTypes.SET_DOCUMENTS_DATA:
             return {
                 ...state,
-                tableData: payload.tableData
+                documentsData: payload.documentsData
             };
 
         case ActionTypes.SET_CURRENT_MONTH:
@@ -25,10 +32,4 @@ export const reducer = (state, { type, payload }) => {
         default:
             return state;
     }
-};
-
-export const initialState = {
-    currentMonth: Months[getMonth(new Date())],
-    filePaths: [],
-    tableData: []
 };
