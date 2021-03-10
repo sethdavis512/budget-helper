@@ -1,10 +1,19 @@
-import ActionTypes from './actionTypes';
-import { getMonth } from 'date-fns';
+import { getMonth, getYear } from 'date-fns';
 
-const currentMonth = getMonth(new Date());
+const date = new Date();
+const currentMonth = getMonth(date);
+const currentYear = getYear(date);
+
+export const ActionTypes = {
+    SET_CURRENT_MONTH: 'SET_CURRENT_MONTH',
+    SET_CURRENT_YEAR: 'SET_CURRENT_YEAR',
+    SET_FILE_PATHS: 'SET_FILE_PATHS',
+    SET_DOCUMENTS_DATA: 'SET_DOCUMENTS_DATA'
+};
 
 export const initialState = {
     currentMonth,
+    currentYear,
     filePaths: [],
     documentsData: []
 };
@@ -27,6 +36,12 @@ export const reducer = (state, { type, payload }) => {
             return {
                 ...state,
                 currentMonth: payload.currentMonth
+            };
+
+        case ActionTypes.SET_CURRENT_YEAR:
+            return {
+                ...state,
+                currentYear: payload.currentYear
             };
 
         default:

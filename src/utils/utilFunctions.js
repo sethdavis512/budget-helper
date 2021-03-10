@@ -3,18 +3,13 @@ import snakeCase from 'lodash/snakeCase';
 import upperCase from 'lodash/upperCase';
 import numeral from 'numeral';
 import { Months } from '../constants';
+import Papaparse from 'papaparse';
 
 const fs = require('fs');
 
 export const readFile = path => fs.readFileSync(path, 'utf8');
 
-export const breakdownDocument = docString => {
-    const docToArrayOfStrings = docString.split('\n');
-    const finalDocArray = docToArrayOfStrings.map(line =>
-        line.replace(', ', ' ').split(',')
-    );
-    return finalDocArray;
-};
+export const breakdownDocument = docString => Papaparse.parse(docString);
 
 export const buildRow = (rowData, isHeader) => {
     if (!rowData) {
@@ -36,19 +31,6 @@ export const buildRow = (rowData, isHeader) => {
             </tr>
         );
     }
-};
-
-export const buildTable = data => (
-    <div className="table-container">
-        <table className="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-            <tbody>{data.map(row => buildRow(row))}</tbody>
-        </table>
-    </div>
-);
-
-export const toDollar = n => {
-    const numWithCommas = n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    return `$${numWithCommas}`;
 };
 
 export const constantCase = v => snakeCase(upperCase(v));
@@ -77,3 +59,10 @@ export const getMonthNumber = rowArr =>
     rowArr[1].includes('/')
         ? numeral(rowArr[1].split('/')[0]).value()
         : 0;
+
+export const getYearNumber = rowArr =>
+    Array.isArray(rowArr) &&
+    typeof rowArr[1] === 'string' &&
+    rowArr[1].includes('/')
+        ? numeral(rowArr[1].split('/')[2]).value()
+        : 2020;

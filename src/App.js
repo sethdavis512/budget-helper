@@ -6,15 +6,16 @@ import sortBy from 'lodash/sortBy';
 import Button from './components/Button';
 import Select from './components/Select';
 import SelectOption from './components/SelectOption';
+import Table from './components/Table';
 import {
     breakdownDocument,
-    buildTable,
     getMonthNumber,
+    getYearNumber,
     readFile
 } from './utils/utilFunctions';
 import { Months } from './constants';
 import { reducer, initialState } from './store';
-import ActionTypes from './store/actionTypes';
+import { ActionTypes } from './store';
 
 const { dialog } = require('electron').remote;
 
@@ -49,21 +50,32 @@ function App() {
     const handleSetCurrentMonth = event =>
         dispatch({
             type: ActionTypes.SET_CURRENT_MONTH,
-            payload: { currentMonth: event.target.value }
+            payload: { currentMonth: Number(event.target.value) }
+        });
+
+    const handleSetCurrentYear = event =>
+        dispatch({
+            type: ActionTypes.SET_CURRENT_YEAR,
+            payload: { currentYear: Number(event.target.value) }
         });
 
     const mappedMonthsOptions = Months.map((m, index) => (
-        <SelectOption value={index} text={m} key={`${m}-${index}`} />
+        <SelectOption value={index} text={m} key={m} />
     ));
 
     const results = state.documentsData.reduce(
         (result, currentDocument) => {
-            currentDocument.forEach(row => {
+            currentDocument.data.forEach(row => {
                 const month = getMonthNumber(row);
-                const modifiedMonthNum = state.currentMonth + 1;
-                const showRow = month === modifiedMonthNum;
+                const year = getYearNumber(row);
 
-                const target = numeral(row[3]);
+                const modifiedMonthNum = state.currentMonth + 1;
+                const showRow =
+                    month === modifiedMonthNum && year === state.currentYear;
+
+                const rowAmount = row[3];
+
+                const target = numeral(rowAmount);
                 const isNumeral = !isNaN(target.value());
 
                 if (isNumeral && target.value() > 0 && showRow) {
@@ -100,8 +112,9 @@ function App() {
     );
 
     const income = results.income.format();
-    const clonedIncome = results.income.clone();
     const expenses = results.expenses.format();
+
+    const clonedIncome = results.income.clone();
 
     const difference = clonedIncome.add(results.expenses.value());
     const formattedDifference = difference.format();
@@ -109,9 +122,6 @@ function App() {
         'has-text-success': difference.value() > 0,
         'has-text-danger': difference.value() < 0
     });
-
-    const incomeTable = buildTable(results.incomeTable);
-    const expensesTable = buildTable(results.expensesTable);
 
     return (
         <section className="section">
@@ -146,11 +156,19 @@ function App() {
                     >
                         {mappedMonthsOptions}
                     </Select>
+                    <Select
+                        handleChange={handleSetCurrentYear}
+                        value={state.currentYear}
+                    >
+                        <option value="2019">2019</option>
+                        <option value="2020">2020</option>
+                        <option value="2021">2021</option>
+                    </Select>
                     <hr />
                     <p className="title is-3">Income:</p>
-                    {incomeTable}
+                    <Table data={results.incomeTable} />
                     <p className="title is-3">Expenses:</p>
-                    {expensesTable}
+                    <Table data={results.expensesTable} />
                 </div>
             </div>
         </section>
